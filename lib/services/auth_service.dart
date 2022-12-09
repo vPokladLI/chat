@@ -13,10 +13,14 @@ class Auth {
         email: email,
         password: password,
       );
-      await _db
-          .collection('users')
-          .doc(authResponse.user?.uid)
-          .set({"email": email, "name": name});
+      if (authResponse.user != null) {
+        await authResponse.user?.sendEmailVerification();
+        await authResponse.user?.updateDisplayName(name);
+        await _db
+            .collection('users')
+            .doc(authResponse.user?.uid)
+            .set({"email": email, "name": name});
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         throw HttpException('The password provided is too weak.');
