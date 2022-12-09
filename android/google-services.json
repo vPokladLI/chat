@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "994275027985",
+    "firebase_url": "https://chat-715d6-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "chat-715d6",
+    "storage_bucket": "chat-715d6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:994275027985:android:4dd4589970ebf06dcf55b0",
+        "android_client_info": {
+          "package_name": "com.example.chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "994275027985-ieecq2pqp4he23air7iumufkfgr6borv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCF5U2SuGePfzp9Ll2Ii-FSOCqDZU0K3OY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "994275027985-ieecq2pqp4he23air7iumufkfgr6borv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "994275027985-s6ik97niidjqeubhv4tqrj6qoeu5k3dp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.chat"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
