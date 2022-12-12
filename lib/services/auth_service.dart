@@ -46,11 +46,15 @@ class Auth {
     }
   }
 
-  Future<void> signOut() async {
-    await _auth.signOut();
+  Stream<User?> get userChanges {
+    return _auth.authStateChanges();
   }
 
-  Stream<User?> get currentUser {
-    return _auth.authStateChanges();
+  User? get user {
+    return _auth.currentUser;
+  }
+
+  Future<void> signOut() async {
+    await _auth.signOut();
   }
 }
