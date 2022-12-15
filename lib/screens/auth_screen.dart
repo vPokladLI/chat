@@ -48,41 +48,14 @@ class AuthCard extends StatefulWidget {
   State<AuthCard> createState() => _AuthCardState();
 }
 
-class _AuthCardState extends State<AuthCard>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-
-  late Animation<double> _opacityAnimation;
-
+class _AuthCardState extends State<AuthCard> {
   final Auth _auth = Auth();
   var _isLoading = false;
   var _passwordVisible = true;
   final GlobalKey<FormState> _formKey = GlobalKey();
   AuthMode _authMode = AuthMode.login;
-  final Map<String, String> _authData = {
-    'email': '',
-    'password': '',
-    'name': ''
-  };
+  Map<String, String> _authData = {'email': '', 'password': '', 'name': ''};
   final _passwordController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-
-    _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 600));
-    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(parent: _animationController, curve: Curves.linear));
-  }
-
-  @override
-  void dispose() {
-    _passwordController.dispose();
-    _animationController.dispose();
-
-    super.dispose();
-  }
 
   void _showDialog(String message) {
     showDialog(
@@ -104,6 +77,7 @@ class _AuthCardState extends State<AuthCard>
       return;
     }
     _formKey.currentState!.save();
+
     setState(() {
       _isLoading = true;
     });
@@ -141,12 +115,10 @@ class _AuthCardState extends State<AuthCard>
       setState(() {
         _authMode = AuthMode.signUp;
       });
-      _animationController.forward();
     } else {
       setState(() {
         _authMode = AuthMode.login;
       });
-      _animationController.reverse();
     }
   }
 
@@ -156,13 +128,12 @@ class _AuthCardState extends State<AuthCard>
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 8,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300), curve: Curves.easeInSine,
-        height: _authMode == AuthMode.login ? 300 : 450,
+      child: Container(
+        height: _authMode == AuthMode.login ? 300 : 480,
         // height: _heightAnimation.value.height,
         width: size.width * 0.75,
         constraints: BoxConstraints(
-          minHeight: _authMode == AuthMode.login ? 300 : 450,
+          minHeight: _authMode == AuthMode.login ? 300 : 480,
         ),
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -213,64 +184,60 @@ class _AuthCardState extends State<AuthCard>
                       _authData['password'] = newValue!.trim();
                     },
                   ),
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 400),
-                    curve: Curves.linear,
+                  Container(
                     constraints: BoxConstraints(
                         minHeight: _authMode == AuthMode.signUp ? 130 : 0,
-                        maxHeight: _authMode == AuthMode.signUp ? 150 : 0),
-                    child: FadeTransition(
-                      opacity: _opacityAnimation,
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            textInputAction: TextInputAction.done,
-                            obscureText: _passwordVisible,
-                            enabled: _authMode == AuthMode.signUp,
-                            decoration: InputDecoration(
-                              label: const Text('Confirm password'),
-                              suffixIcon: IconButton(
-                                icon: Icon(_passwordVisible
-                                    ? Icons.visibility
-                                    : Icons.visibility_off),
-                                onPressed: () {
-                                  setState(() {
-                                    _passwordVisible = !_passwordVisible;
-                                  });
-                                },
-                              ),
+                        maxHeight: _authMode == AuthMode.signUp ? 180 : 0),
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          textInputAction: TextInputAction.done,
+                          obscureText: _passwordVisible,
+                          enabled: _authMode == AuthMode.signUp,
+                          decoration: InputDecoration(
+                            label: const Text('Confirm password'),
+                            suffixIcon: IconButton(
+                              icon: Icon(_passwordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off),
+                              onPressed: () {
+                                setState(() {
+                                  _passwordVisible = !_passwordVisible;
+                                });
+                              },
                             ),
-                            keyboardType: TextInputType.visiblePassword,
-                            validator: _authMode == AuthMode.signUp
-                                ? (value) {
-                                    if (value != _passwordController.text) {
-                                      return 'Passwords are not equal';
-                                    }
-                                    return null;
+                          ),
+                          keyboardType: TextInputType.visiblePassword,
+                          validator: _authMode == AuthMode.signUp
+                              ? (value) {
+                                  if (value != _passwordController.text) {
+                                    return 'Passwords are not equal';
                                   }
-                                : null,
-                            onEditingComplete: _submitForm,
+                                  return null;
+                                }
+                              : null,
+                          onEditingComplete: _submitForm,
+                        ),
+                        TextFormField(
+                          textInputAction: TextInputAction.next,
+                          enabled: _authMode == AuthMode.signUp,
+                          validator: _authMode == AuthMode.signUp
+                              ? (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Please enter your name!';
+                                  }
+                                  return null;
+                                }
+                              : null,
+                          onSaved: (newValue) {
+                            _authData['name'] = newValue!.trim();
+                          },
+                          decoration: InputDecoration(
+                            label: const Text('Name'),
                           ),
-                          TextFormField(
-                            textInputAction: TextInputAction.next,
-                            enabled: _authMode == AuthMode.signUp,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your name';
-                              }
-                              return null;
-                            },
-                            onSaved: (newValue) {
-                              _authData['name'] = newValue!.trim();
-                            },
-                            decoration: InputDecoration(
-                              label: const Text('Name'),
-                            ),
-                            keyboardType: TextInputType.visiblePassword,
-                            onEditingComplete: _submitForm,
-                          ),
-                        ],
-                      ),
+                          keyboardType: TextInputType.visiblePassword,
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(

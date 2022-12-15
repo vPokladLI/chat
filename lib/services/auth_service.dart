@@ -16,10 +16,8 @@ class Auth {
       if (authResponse.user != null) {
         await authResponse.user?.sendEmailVerification();
         await authResponse.user?.updateDisplayName(name);
-        await _db
-            .collection('users')
-            .doc(authResponse.user?.uid)
-            .set({"email": email, "name": name});
+        await authResponse.user?.updatePhotoURL(
+            'https://firebasestorage.googleapis.com/v0/b/chat-715d6.appspot.com/o/user_img%2Favatar_placeholder.jpg?alt=media&token=824e372b-b52e-4522-9fdb-5e3127141fba');
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -52,6 +50,10 @@ class Auth {
 
   User? get user {
     return _auth.currentUser;
+  }
+
+  Future<void>? updateName(String name) {
+    return user?.updateDisplayName(name);
   }
 
   Future<void> signOut() async {

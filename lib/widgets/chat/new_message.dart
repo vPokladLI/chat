@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../services/firebase_service.dart';
+import '../../services/firestore_service.dart';
 import '../../services/auth_service.dart';
 
 class NewMessage extends StatefulWidget {
@@ -17,14 +17,16 @@ class _NewMessageState extends State<NewMessage> {
   Future<void> _sendMessage() async {
     FocusScope.of(context).unfocus();
     await db.addMessage(_enteredMessage, auth.user?.uid as String);
+    _enteredMessage = '';
     messageController.clear();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 8),
-      padding: EdgeInsets.all(4),
+      color: Colors.white,
+      // margin: EdgeInsets.only(top: 8),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
           Expanded(
